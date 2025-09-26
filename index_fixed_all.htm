@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VIVA+ Benchmark: Human-Centered Situational Decision-Making</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+  <style type="text/tailwindcss">
+  @layer components {
+    body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #1f2937; }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    .section-title {
+      @apply text-3xl md:text-4xl font-bold tracking-tight text-center mb-12;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      text-shadow: 0 1px 0 rgba(0,0,0,0.04);
+    }
+
+    .card { @apply bg-white border border-gray-200 rounded-2xl p-6 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300; }
+
+    /* Reusable chips */
+.chip {
+  @apply inline-block px-2.5 py-0.5 rounded-full text-[11px] ring-1 ring-gray-200 align-top leading-tight;
+  /* 允许换行 & 安全分词，避免溢出 */
+  max-width: 100%;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  hyphens: auto;            /* Safari/Chrome/Firefox 支持 */
+}
+    .chip--purple { @apply bg-purple-50 text-purple-700 ring-purple-200; }
+    .chip--blue   { @apply bg-blue-50   text-blue-700   ring-blue-200; }
+    .chip--amber  { @apply bg-amber-50  text-amber-700  ring-amber-200; }
+    .chip--green  { @apply bg-green-50  text-green-700  ring-green-200; }
+  }
+  </style>
+</head>
+
+<body class="antialiased">
+
+  <!-- Header & Navigation -->
+  <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200">
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center" aria-label="Primary">
+      <h1 class="text-2xl font-bold">
+        <a href="#">VIVA<span class="gradient-text">+</span></a>
+      </h1>
+      <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-600">
+        <a href="#about" class="hover:text-gray-900 transition-colors duration-300">About</a>
+        <a href="#abilities" class="hover:text-gray-900 transition-colors duration-300">Core Abilities</a>
+        <a href="#examples" class="hover:text-gray-900 transition-colors duration-300">Examples</a>
+        <a href="#dataset" class="hover:text-gray-900 transition-colors duration-300">Dataset</a>
+        <a href="#pipeline" class="hover:text-gray-900 transition-colors duration-300">Data</a>
+        <a href="#errors" class="hover:text-gray-900 transition-colors duration-300">Errors</a>
+        <a href="#citation" class="hover:text-gray-900 transition-colors duration-300">Citation</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="relative h-[90vh] flex items-center justify-center text-center overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50"></div>
+      <div class="absolute inset-0 bg-grid-gray-300/10 [mask-image:linear-gradient(to_bottom,white_5%,transparent_90%)]"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/20 to-white/80"></div>
+
+      <div class="container mx-auto px-6 z-10">
+        <h2 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter">
+          VIVA<span class="gradient-text">+</span> Benchmark
+        </h2>
+        <p class="mt-4 text-lg md:text-xl max-w-3xl mx-auto text-gray-600">
+          A Cognitively Grounded Benchmark for Evaluating Human-Centered Reasoning and Decision-Making in Multimodal Large Language Models.
+        </p>
+
+        <div class="mt-8 flex justify-center gap-4">
+          <a href="#pipeline"
+             class="group inline-flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-full
+                    shadow-lg shadow-purple-500/20 ring-1 ring-purple-300/40 hover:bg-gray-800 hover:shadow-purple-500/30
+                    transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400/60">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <ellipse cx="12" cy="6" rx="7" ry="3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+              <path d="M5 6v8c0 1.66 3.13 3 7 3s7-1.34 7-3V6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+              <path d="M5 10c0 1.66 3.13 3 7 3s7-1.34 7-3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+            </svg>
+            <span>Data</span>
+          </a>
+
+          <a href="https://arxiv.org/abs/2405.14352" target="_blank" rel="noopener noreferrer"
+             class="group inline-flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-full
+                    shadow-lg shadow-purple-500/20 ring-1 ring-purple-300/40 hover:bg-gray-800 hover:shadow-purple-500/30
+                    transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400/60">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M7 7h10M7 11h10M7 15h7M5 4h10l4 4v12a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"/>
+            </svg>
+            <span>View Paper</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 opacity-70 group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 3h7m0 0v7m0-7L10 14M5 7v12a2 2 0 002 2h12"/>
+            </svg>
+          </a>
+
+          <a href="https://github.com/your-org/your-repo" target="_blank" rel="noopener noreferrer"
+             class="group inline-flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-full
+                    shadow-lg shadow-purple-500/20 ring-1 ring-purple-300/40 hover:bg-gray-800 hover:shadow-purple-500/30
+                    transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400/60">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>
+            </svg>
+            <span>Code</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 opacity-70 group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 3h7m0 0v7m0-7L10 14M5 7v12a2 2 0 002 2h12"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="mt-12 max-w-5xl mx-auto">
+          <img src="static/images/intro_fig_new.jpg"
+               alt="Overview of the VIVA+ Benchmark showing diverse human-centered situations"
+               class="rounded-2xl border-2 border-purple-200 shadow-2xl shadow-purple-500/20 hover:shadow-purple-500/30 transition-all duration-300"/>
+          <p class="text-xs text-gray-500 mt-2">Figure 1 from the paper, showcasing the three core abilities evaluated by VIVA+.</p>
+        </div>
+      </div>
+    </section>
+
+
+
+
+<!-- What is VIVA -->
+<section id="about" class="py-16 md:py-24">
+  <div class="container mx-auto px-6">
+    <h2 class="section-title">What is VIVA+?</h2>
+    <div class="max-w-4xl mx-auto text-gray-600 text-lg leading-relaxed space-y-4">
+      <ul class="list-disc list-inside space-y-3 text-left">
+        <li>
+          <span class="text-gray-900 font-semibold">Human-centered focus:</span>
+          As Multimodal Large Language Models (MLLMs) become more integrated into our lives, their ability to navigate complex, human-centered environments is crucial.
+        </li>
+        <li>
+          <span class="text-gray-900 font-semibold">Grounded in theory:</span>
+          Built upon <strong class="text-gray-900">Naturalistic Decision-Making (NDM)</strong>, VIVA+ goes beyond simple action prediction to assess perception, reasoning, and socially meaningful action.
+        </li>
+        <li>
+          <span class="text-gray-900 font-semibold">Benchmark scale:</span>
+          <span class="gradient-text">1,317</span> real-world images paired with 
+          <span class="gradient-text">6,373</span> multiple-choice questions.
+        </li>
+        <li>
+          <span class="text-gray-900 font-semibold">Cognitive coverage:</span>
+          7 distinct tasks across 3 core cognitive abilities, enabling rigorous and holistic evaluation of MLLMs.
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+    <!-- Three Abilities -->
+    <section id="abilities" class="py-16 md:py-24 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
+      <div class="container mx-auto px-6">
+        <h2 class="section-title">Three Core Cognitive Abilities</h2>
+        <div class="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          <div class="card text-center">
+            <div class="flex justify-center mb-4">
+              <svg class="w-12 h-12 gradient-text" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-2 text-gray-900">1. Foundational Situation Comprehension</h3>
+            <p class="text-gray-600 text-sm">Assess whether the model accurately perceives and interprets a situation—does it notice crucial visual details and context?</p>
+          </div>
+
+          <div class="card text-center">
+            <div class="flex justify-center mb-4">
+              <svg class="w-12 h-12 gradient-text" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-2 text-gray-900">2. Context-Driven Action Justification</h3>
+            <p class="text-gray-600 text-sm">Evaluate action choices under constraints (social roles, physical limits). Can it determine what to do, and why?</p>
+          </div>
+
+          <div class="card text-center">
+            <div class="flex justify-center mb-4">
+              <svg class="w-12 h-12 gradient-text" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-2 text-gray-900">3. Reflective Reasoning</h3>
+            <p class="text-gray-600 text-sm">Capture higher-order reasoning for ambiguous cases—implicit role inference, misinterpretation analysis, counterfactuals.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+
+
+    <!-- Pipeline-->
+<section id="pipeline" class="py-16 md:py-24">
+  <div class="container mx-auto px-6 max-w-6xl">
+    <h2 class="section-title">Data Annotation &amp; Construction Pipeline</h2>
+
+    <!-- 等高关键：items-stretch + 两侧都用 .card.h-full -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+      
+      <!-- LEFT: figure as a full-height card -->
+      <figure class="order-2 lg:order-1 card h-full p-4 flex flex-col">
+        <div class="flex-1 min-h-0">
+          <img
+            src="static/images/pipeline.png"
+            alt="Figure 2: Data construction pipeline — Phase 1 (Question Annotation) and Phase 2 (Verification & Quality Check)"
+            class="w-full h-full object-contain rounded-xl ring-1 ring-gray-200"
+            loading="lazy" decoding="async"
+          />
+        </div>
+        <figcaption class="mt-2 text-xs text-gray-500 text-center">
+          Figure 2. Pipeline of data construction.
+        </figcaption>
+      </figure>
+
+      <!-- RIGHT: both phases inside one full-height card -->
+      <div class="order-1 lg:order-2">
+        <div class="card h-full flex flex-col">
+          <div class="grid gap-5">
+            <!-- Phase 1 -->
+            <div class="rounded-xl border border-gray-200 p-5">
+              <h3 class="text-base font-semibold text-gray-900 flex items-center gap-2">
+                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-900 text-white text-xs">1</span>
+                Phase 1 · Question Annotation
+              </h3>
+              <ul class="mt-3 text-sm text-gray-700 space-y-1">
+                <li><span class="font-medium text-gray-900">Brainstorm:</span> craft situation frames & prompts.</li>
+                <li><span class="font-medium text-gray-900">Human annotation:</span> write MCQs, options, and answer keys.</li>
+              </ul>
+              <p class="mt-3 text-xs text-gray-600">
+                Abilities covered: <span class="font-medium text-gray-900">Foundational Situation Comprehension</span> ·
+                <span class="font-medium text-gray-900">Context-Driven Action Justification</span> ·
+                <span class="font-medium text-gray-900">Reflective Reasoning</span>
+              </p>
+              <div class="mt-3 inline-flex items-center gap-2 px-2 py-1 rounded bg-green-50 text-green-700 ring-1 ring-green-200 text-xs">
+                <span class="font-medium">Output</span><span>Annotated Questions</span>
+              </div>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="rounded-xl border border-gray-200 p-5">
+              <h3 class="text-base font-semibold text-gray-900 flex items-center gap-2">
+                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-900 text-white text-xs">2</span>
+                Phase 2 · Verification &amp; Quality Check
+              </h3>
+              <ul class="mt-3 text-sm text-gray-700 space-y-1">
+                <li><span class="font-medium text-gray-900">Cross verification:</span> independent review & adjudication.</li>
+                <li><span class="font-medium text-gray-900">Sample check:</span> stratified / random audits.</li>
+              </ul>
+              <ul class="mt-3 text-xs text-gray-600 list-disc list-inside">
+                <li>Refinement</li>
+                <li>Bias reduction</li>
+                <li>Quality check</li>
+              </ul>
+              <div class="mt-3 inline-flex items-center gap-2 px-2 py-1 rounded bg-blue-50 text-blue-700 ring-1 ring-blue-200 text-xs">
+                <span class="font-medium">Output</span><span>Final Data</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 推底部，确保右侧卡片填满高度 -->
+          <div class="mt-auto"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- Dataset Statistics -->
+<section id="dataset" class="py-16 md:py-24">
+  <div class="container mx-auto px-6 max-w-6xl">
+    <h2 class="section-title">Dataset Statistics</h2>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+      <!-- Left: image (same height as right) -->
+      <div class="lg:col-span-7">
+        <figure class="card h-full flex flex-col p-4">
+          <div class="flex-1 min-h-0 flex items-center justify-center">
+            <img src="static/images/Statistic.png"
+                 alt="Figure: Dataset statistics (Q1–Q7 distribution)"
+                 class="w-full h-full object-contain rounded-xl ring-1 ring-gray-200"
+                 loading="lazy" decoding="async"/>
+          </div>
+          <figcaption class="mt-2 text-xs text-gray-500 text-center">
+            Figure: Dataset overview — total number and average length for each question type (Q1–Q7).
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- Right: key facts & notes -->
+      <div class="lg:col-span-5">
+        <div class="card h-full flex flex-col">
+          <h3 class="text-base md:text-lg font-semibold text-gray-900">At a glance</h3>
+
+          <div class="mt-3 grid grid-cols-2 gap-3 text-sm">
+            <div class="rounded-xl ring-1 ring-purple-200 bg-purple-50 px-4 py-3">
+              <div class="text-xs text-purple-700">Images</div>
+              <div class="text-xl font-bold text-purple-800">1,317</div>
+            </div>
+            <div class="rounded-xl ring-1 ring-blue-200 bg-blue-50 px-4 py-3">
+              <div class="text-xs text-blue-700">Questions</div>
+              <div class="text-xl font-bold text-blue-800">6,373</div>
+            </div>
+            <div class="rounded-xl ring-1 ring-emerald-200 bg-emerald-50 px-4 py-3">
+              <div class="text-xs text-emerald-700">Question Types</div>
+              <div class="text-xl font-bold text-emerald-800">7 (Q1–Q7)</div>
+            </div>
+            <div class="rounded-xl ring-1 ring-amber-200 bg-amber-50 px-4 py-3">
+              <div class="text-xs text-amber-700">Core Abilities</div>
+              <div class="text-xl font-bold text-amber-800">3</div>
+            </div>
+          </div>
+
+          <!-- English introduction -->
+          <div class="mt-4 text-[13px] text-gray-700 space-y-2">
+            <p>
+              <strong class="text-gray-900">Q1–Q2:</strong> Perception · 
+              <strong class="text-gray-900">Q3–Q4:</strong> Decision under constraints · 
+              <strong class="text-gray-900">Q5–Q7:</strong> Reflective reasoning
+            </p>
+            <p class="text-gray-500 text-xs">Note: statistics are consistent with the paper’s reported results.</p>
+          </div>
+
+          <div class="mt-4 border-t pt-3">
+            <div class="text-[12px] font-semibold text-gray-900 mb-1.5">Q-type quick mapping</div>
+            <div class="flex flex-wrap gap-2 text-[11px]">
+              <span class="px-2.5 py-0.5 rounded-full ring-1 ring-gray-200">Q1 · Detail/Spatial</span>
+              <span class="px-2.5 py-0.5 rounded-full ring-1 ring-gray-200">Q2 · Critical Info</span>
+              <span class="px-2.5 py-0.5 rounded-full ring-1 ring-gray-200">Q3 · “Safe Choice”</span>
+              <span class="px-2.5 py-0.5 rounded-full ring-1 ring-gray-200">Q4 · Constraint</span>
+              <span class="px-2.5 py-0.5 rounded-full ring-1 ring-gray-200">Q5 · Role Bias</span>
+              <span class="px-2.5 py-0.5 rounded-full ring-1 ring-gray-200">Q6 · Misinterpretation</span>
+              <span class="px-2.5 py-0.5 rounded-full ring-1 ring-gray-200">Q7 · Superficial</span>
+            </div>
+          </div>
+
+          <div class="mt-3 grow"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+<!-- Examples -->
+<section id="examples" class="py-16 md:py-24">
+  <div class="container mx-auto px-6">
+    <h2 class="section-title">Benchmark Examples</h2>
+
+    <div class="space-y-16 max-w-5xl mx-auto">
+      <!-- Example 1 -->
+      <div class="card grid md:grid-cols-2 gap-6 items-center">
+        <img src="static/images/Q1.jpeg"
+             alt="Woman driving a car and throwing something out of the window"
+             class="rounded-xl border-2 border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300"/>
+        <div>
+          <h4 class="font-bold text-lg gradient-text">Q1: Visual Detail Recognition</h4>
+          <p class="mt-2 text-gray-900"><strong>Q:</strong> Based on the image, which statement about the woman's movement is incorrect?</p>
+          <ul class="mt-4 space-y-2 text-sm text-gray-600 list-disc list-inside">
+            <li>The woman is using her right hand to throw rubbish.</li>
+            <li class="text-green-600 font-semibold bg-green-50 px-3 py-1 rounded-lg">The woman is taking her left hand off the wheel. (Correct)</li>
+            <li>The woman faces the window, staring at the rubbish she throws.</li>
+            <li>Her left arm is resting steadily on the door handle.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Example 2 -->
+      <div class="card grid md:grid-cols-2 gap-6 items-center">
+        <div>
+          <h4 class="font-bold text-lg gradient-text">Q2: Critical Information Identification</h4>
+          <p class="mt-2 text-gray-900"><strong>Q:</strong> What key information is most critical to judge whether intervention is needed?</p>
+          <ul class="mt-4 space-y-2 text-sm text-gray-600 list-disc list-inside">
+            <li class="text-green-600 font-semibold bg-green-50 px-3 py-1 rounded-lg">Check if the green bottle contains alcohol. (Correct)</li>
+            <li>Determine if the car is moving or parked.</li>
+            <li>See if there are passengers who might be affected.</li>
+            <li>Identify the brand and model of the car.</li>
+          </ul>
+        </div>
+        <img src="static/images/Q2.jpg"
+             alt="Driver holding a green bottle"
+             class="rounded-xl border-2 border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300"/>
+      </div>
+
+      <!-- Example 3 -->
+      <div class="card grid md:grid-cols-2 gap-6 items-center">
+        <img src="static/images/Q3.jpg"
+             alt="An injured man on the road; paramedic vs passerby roles"
+             class="rounded-xl border-2 border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300"/>
+        <div>
+          <h4 class="font-bold text-lg gradient-text">Q3: Social Role-Based Action Selection</h4>
+          <p class="mt-2 text-gray-900"><strong>Q:</strong> Which action is appropriate only for the paramedic, not the passerby?</p>
+          <ul class="mt-4 space-y-2 text-sm text-gray-600 list-disc list-inside">
+            <li>Call emergency services and secure a safety perimeter.</li>
+            <li>Warn oncoming traffic to slow down.</li>
+            <li class="text-green-600 font-semibold bg-green-50 px-3 py-1 rounded-lg">Try to stabilize the injured leg with first aid. (Correct)</li>
+            <li>Provide basic reassurance until help arrives.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Example 4 -->
+      <div class="card grid md:grid-cols-2 gap-6 items-center">
+        <div>
+          <h4 class="font-bold text-lg gradient-text">Q4: Environment-Constrained Action Selection</h4>
+          <p class="mt-2 text-gray-900">
+            <strong class="text-amber-600">Constraints:</strong> help is ~15 minutes away; fire is spreading; another vehicle ~5m.<br/>
+            <strong class="text-amber-600">Tools:</strong> extinguisher (≈50m), rope, smartphone.<br/>
+            <strong>Q:</strong> What is the most suitable action?
+          </p>
+          <ul class="mt-4 space-y-2 text-sm text-gray-600 list-disc list-inside">
+            <li class="text-green-600 font-semibold bg-green-50 px-3 py-1 rounded-lg">Call emergency, set a ~20m safety perimeter, monitor from distance. (Correct)</li>
+            <li>Push the nearby vehicle and retrieve the extinguisher, then wait beside the scene.</li>
+            <li>Approach the fire to record a close-up video for evidence.</li>
+            <li>Attempt to tow the burning car away using the rope.</li>
+          </ul>
+        </div>
+        <img src="static/images/Q4.jpg"
+             alt="A person near a burning car"
+             class="rounded-xl border-2 border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300"/>
+      </div>
+
+      <!-- Example 5 -->
+      <div class="card grid md:grid-cols-2 gap-6 items-center">
+        <img src="static/images/Q5.jpg"
+             alt="A reflective-vest officer stopping a driver"
+             class="rounded-xl border-2 border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300"/>
+        <div>
+          <h4 class="font-bold text-lg gradient-text">Q5: Behavioral Role Inference</h4>
+          <p class="mt-2 text-gray-900"><strong>Q:</strong> The person in a reflective vest fines the driver for phone use. Who is this most likely?</p>
+          <ul class="mt-4 space-y-2 text-sm text-gray-600 list-disc list-inside">
+            <li>Construction worker.</li>
+            <li>Parking attendant.</li>
+            <li>Security guard.</li>
+            <li class="text-green-600 font-semibold bg-green-50 px-3 py-1 rounded-lg">Traffic officer. (Correct)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Example 6 -->
+      <div class="card grid md:grid-cols-2 gap-6 items-center">
+        <div>
+          <h4 class="font-bold text-lg gradient-text">Q6: Situational Misinterpretation Analysis</h4>
+          <p class="mt-2 text-gray-900">A bystander panics, thinking a child is drowning, but the child was <span class="text-amber-600">play-acting</span>.</p>
+          <ul class="mt-4 space-y-2 text-sm text-gray-600 list-disc list-inside">
+            <li>There were many people around, causing confusion.</li>
+            <li>The water looked dark from a distance.</li>
+            <li class="text-green-600 font-semibold bg-green-50 px-3 py-1 rounded-lg">Raised arm & low posture looked like distress. (Correct)</li>
+            <li>The pool music was loud and distracting.</li>
+          </ul>
+        </div>
+        <img src="static/images/Q6.jpg"
+             alt="Child in pool, playful pose misread as distress"
+             class="rounded-xl border-2 border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300"/>
+      </div>
+
+      <!-- Example 7 -->
+      <div class="card grid md:grid-cols-2 gap-6 items-center">
+        <img src="static/images/Q7.jpeg"
+             alt="A child in a crowd with nearby parents observing"
+             class="rounded-xl border-2 border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300"/>
+        <div>
+          <h4 class="font-bold text-lg gradient-text">Q7: Counterfactual and Norm Deviant Reasoning</h4>
+          <p class="mt-2 text-gray-900"><strong>Q:</strong> Why might an adult ignore a situation where a child seems to need help?</p>
+          <ul class="mt-4 space-y-2 text-sm text-gray-600 list-disc list-inside">
+            <li>The adult assumes it's fine since no one else is reacting.</li>
+            <li>The adult thinks the child is just playing a game.</li>
+            <li>The adult feels unqualified to intervene safely.</li>
+            <li class="text-green-600 font-semibold bg-green-50 px-3 py-1 rounded-lg">Parents are nearby and observing. (Correct)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- Key Results & Insights Section -->
+<section id="results" class="py-20 md:py-28 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+  <div class="container mx-auto px-6">
+    <h2 class="section-title">Key Results & Insights</h2>
+
+    <div class="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto items-stretch">
+      
+      <!-- Leaderboard Table -->
+      <div class="flex flex-col">
+        <h3 class="text-2xl font-bold mb-4 text-center">Model Performance</h3>
+        <div class="card overflow-x-auto h-full flex flex-col">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-700 uppercase bg-gradient-to-r from-purple-100 to-blue-100">
+              <tr>
+                <th scope="col" class="px-6 py-3">Model</th>
+                <th scope="col" class="px-6 py-3 text-center">Situation Comp.</th>
+                <th scope="col" class="px-6 py-3 text-center">Action Justif.</th>
+                <th scope="col" class="px-6 py-3 text-center">Reflective Reas.</th>
+                <th scope="col" class="px-6 py-3 text-center font-bold">Overall Avg.</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr class="border-b border-gray-200 hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 transition-all duration-200">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">GPT-4.1 (Commercial)</th>
+                <td class="px-6 py-4 text-center">79.58%</td>
+                <td class="px-6 py-4 text-center">87.79%</td>
+                <td class="px-6 py-4 text-center">85.89%</td>
+                <td class="px-6 py-4 text-center font-bold text-green-700 bg-green-50 rounded-lg">84.63%</td>
+              </tr>
+
+                <tr class="border-b border-gray-200 hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 transition-all duration-200">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">Qwen2.5-VL-72B (Open)</th>
+                <td class="px-6 py-4 text-center">79.32%</td>
+                <td class="px-6 py-4 text-center">84.37%</td>
+                <td class="px-6 py-4 text-center">83.59%</td>
+                <td class="px-6 py-4 text-center font-bold text-emerald-600 bg-emerald-50 rounded-lg">82.59%</td>
+              </tr>
+
+                <tr class="border-b border-gray-200 hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 transition-all duration-200">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">Gemini-2.0-flash (Commercial)</th>
+                <td class="px-6 py-4 text-center">76.74%</td>
+                <td class="px-6 py-4 text-center">80.86%</td>
+                <td class="px-6 py-4 text-center">82.00%</td>
+                <td class="px-6 py-4 text-center font-bold text-blue-600 bg-blue-50 rounded-lg">80.17%</td>
+              </tr>
+
+
+
+              <tr class="border-b border-gray-200 hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 transition-all duration-200">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">InternVL3-38B (Open)</th>
+                <td class="px-6 py-4 text-center">76.37%</td>
+                <td class="px-6 py-4 text-center">75.14%</td>
+                <td class="px-6 py-4 text-center">78.90%</td>
+                <td class="px-6 py-4 text-center font-bold text-amber-600 bg-amber-50 rounded-lg">77.10%</td>
+              </tr>
+
+              <tr class="hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 transition-all duration-200">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">Llama3.2-Vision-11B (Open)</th>
+                <td class="px-6 py-4 text-center">55.36%</td>
+                <td class="px-6 py-4 text-center">59.27%</td>
+                <td class="px-6 py-4 text-center">63.74%</td>
+                <td class="px-6 py-4 text-center font-bold text-orange-600 bg-orange-50 rounded-lg">60.07%</td>
+              </tr>
+
+              <tr class="hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 transition-all duration-200">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">LLaVA-1.6-13B (Open)</th>
+                <td class="px-6 py-4 text-center">58.41%</td>
+                <td class="px-6 py-4 text-center">50.11%</td>
+                <td class="px-6 py-4 text-center">61.28%</td>
+                <td class="px-6 py-4 text-center font-bold text-red-600 bg-red-50 rounded-lg">57.27%</td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+
+      <!-- Common Challenges -->
+      <div class="flex flex-col">
+        <h3 class="text-2xl font-bold mb-4 text-center">Common Model Challenges</h3>
+        <div class="card h-full flex flex-col space-y-4">
+          
+          <!-- Perception -->
+          <div>
+            <h4 class="font-semibold text-gray-900">Perception (Q1–Q2)</h4>
+            <p class="text-sm text-gray-600">
+              Struggles with fine-grained detail, spatial relations, and critical information cues.
+            </p>
+            <div class="mt-2 flex flex-wrap gap-1.5">
+              <span class="chip chip--purple">Detail / Spatial misinterpretation</span>
+              <span class="chip chip--purple">Critical-info oversight</span>
+            </div>
+          </div>
+
+          <!-- Constraint & Decision -->
+          <div>
+            <h4 class="font-semibold text-gray-900">Constraint & Decision (Q3–Q4)</h4>
+            <p class="text-sm text-gray-600">
+              Ignores social/physical limits; defaults to broadly “safe” but misaligned actions.
+            </p>
+            <div class="mt-2 flex flex-wrap gap-1.5">
+              <span class="chip chip--blue">“Safe choice” bias</span>
+              <span class="chip chip--blue">Constraint neglect</span>
+            </div>
+            <div class="mt-3 text-[12px] text-gray-700">
+              <span class="chip chip--green">SFT reduces safe-choice (Q3 ↑)</span>
+              <span class="chip chip--blue">CoT helps Q3, limited for Q4</span>
+              <span class="chip chip--amber">Consequence prediction → Q3/Q4 boost (GPT-4o-mini)</span>
+            </div>
+          </div>
+
+          <!-- Reflective Reasoning -->
+          <div>
+            <h4 class="font-semibold text-gray-900">Reflective Reasoning (Q5–Q7)</h4>
+            <p class="text-sm text-gray-600">
+              Over-assigns roles, produces generalized answers lacking context sensitivity.
+            </p>
+            <div class="mt-2 flex flex-wrap gap-1.5">
+              <span class="chip chip--amber">Role/authority bias</span>
+              <span class="chip chip--amber">Superficial & context-independent reasoning</span>
+            </div>
+            <p class="mt-3 text-[12px] text-gray-700">
+              Hardest dimension; performance drops sharply in complex social scenarios.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+<section id="errors" class="py-16 md:py-24">
+      <div class="container mx-auto px-6 max-w-6xl">
+        <h2 class="section-title">Error Analysis</h2>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          <!-- Left: figure -->
+          <div class="lg:col-span-5">
+            <figure class="card h-full p-4 flex flex-col">
+              <div class="flex-1 min-h-0">
+                <!-- Rename your file to error-wheel.png -->
+                <img src="static/images/error-wheel.png"
+                     alt="Figure 5: Common model errors by question type (Q1–Q7)"
+                     class="w-full h-full object-contain rounded-xl ring-1 ring-gray-200"
+                     loading="lazy" decoding="async"/>
+              </div>
+              <figcaption class="mt-2 text-xs text-gray-500 text-center">
+                Figure 5. Common model errors by question type.
+              </figcaption>
+            </figure>
+          </div>
+
+          <!-- Right: three layers + interventions -->
+          <div class="lg:col-span-7">
+            <div class="card h-full flex flex-col">
+              <h3 class="text-base md:text-lg font-semibold text-gray-900">
+                Where models break — perception → decision → reflection
+              </h3>
+
+              <ol class="mt-3 space-y-3 text-[13px] text-gray-800">
+                <li class="flex gap-3 items-start">
+                  <span class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gray-900 text-white text-[11px]">1</span>
+                  <div class="grow">
+                    <div class="font-medium text-gray-900">Perception (Q1–Q2)</div>
+                    <div class="mt-1.5 flex flex-wrap gap-1.5">
+                      <span class="chip chip--purple">Detail Misinterpretation</span>
+                      <span class="chip chip--purple">Spatial Misinterpretation</span>
+                      <span class="chip chip--purple">Critical Information Oversight</span>
+                    </div>
+                  </div>
+                </li>
+
+                <li class="flex gap-3 items-start">
+                  <span class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gray-900 text-white text-[11px]">2</span>
+                  <div class="grow">
+                    <div class="font-medium text-gray-900">Constraint &amp; Decision (Q3–Q4)</div>
+                    <div class="mt-1.5 flex flex-wrap gap-1.5">
+                      <span class="chip chip--blue">“Safe Choice” Bias</span>
+                      <span class="chip chip--blue">Constraint Neglect</span>
+                    </div>
+                  </div>
+                </li>
+
+                <li class="flex gap-3 items-start">
+                  <span class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gray-900 text-white text-[11px]">3</span>
+                  <div class="grow">
+                    <div class="font-medium text-gray-900">Reflective Reasoning (Q5–Q7)</div>
+                    <div class="mt-1.5 flex flex-wrap gap-1.5">
+                      <span class="chip chip--amber">Role Inference / Authority Bias</span>
+                      <span class="chip chip--amber">Superficial &amp; Context-Independent Reasoning</span>
+                    </div>
+                  </div>
+                </li>
+              </ol>
+
+              <div class="mt-4 border-t pt-3">
+                <div class="text-[12px] font-semibold text-gray-900 mb-1.5">Interventions that help</div>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="chip chip--green">SFT reduces “safe-choice” (Q3, overall)</span>
+                  <span class="chip chip--blue">Chain-of-Thought → Q3 boost; limited on Q4</span>
+                  <span class="chip chip--amber">Consequence prediction → better Q4 actions</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+
+    <!-- Citation -->
+    <section id="citation" class="py-16 md:py-24">
+      <div class="container mx-auto px-6 max-w-4xl">
+        <h2 class="section-title">Team & Citation</h2>
+        <div class="text-center mb-12">
+          <p class="text-lg font-semibold text-gray-900">Zhe Hu, Yixiao Ren, Guanzhong Liu, Jing Li, Yu Yin</p>
+          <p class="text-gray-600">The Hong Kong Polytechnic University &amp; Case Western Reserve University</p>
+        </div>
+        <div class="card">
+          <h3 class="font-semibold text-gray-900 mb-2">BibTeX Citation</h3>
+<pre class="bg-gradient-to-br from-gray-900 to-gray-800 p-6 rounded-xl text-xs text-gray-200 overflow-x-auto shadow-lg"><code>@inproceedings{hu2024viva,
+  title={{VIVA+}: Human-Centered Situational Decision-Making},
+  author={Hu, Zhe and Ren, Yixiao and Liu, Guanzhong and Li, Jing and Yin, Yu},
+  booktitle={Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing},
+  year={2025}
+}</code></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-200">
+    <div class="container mx-auto px-6 py-8 text-center text-gray-500 text-sm">
+      <p>&copy; 2025 VIVA+ Benchmark Team. All Rights Reserved.</p>
+      <p class="mt-2">This website is a summary based on the research paper. For full details, please refer to the official publication.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
